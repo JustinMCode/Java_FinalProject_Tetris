@@ -23,6 +23,9 @@ package main.java.tetris.ui.startmenu;
 import java.awt.*;
 import javax.swing.*;
 
+import main.java.tetris.Game.Credits;
+import main.java.tetris.Game.MultiPlayer;
+import main.java.tetris.Game.Options;
 import main.java.tetris.Game.SinglePlayer;
 import main.java.tetris.ui.UIConstants;
 
@@ -110,6 +113,11 @@ public class StartMenu extends JFrame {
     public void startMultiplayer() {
         // TODO: Implement multiplayer start logic
         JOptionPane.showMessageDialog(this, "Starting Multiplayer...");
+        this.getContentPane().removeAll();
+        MultiPlayer MPGame = new MultiPlayer();
+        this.add(MPGame);
+        this.revalidate();
+        this.repaint();
     }
 
     /*
@@ -119,6 +127,11 @@ public class StartMenu extends JFrame {
     public void openOptions() {
         // TODO: Implement options menu
         JOptionPane.showMessageDialog(this, "Opening Options...");
+        this.getContentPane().removeAll();
+        Options options = new Options();
+        this.add(options);
+        this.revalidate();
+        this.repaint();
     }
 
     /*
@@ -128,6 +141,11 @@ public class StartMenu extends JFrame {
     public void showCredits() {
         // TODO: Implement credits display
         JOptionPane.showMessageDialog(this, "Showing Credits...");
+        this.getContentPane().removeAll();
+        Credits credits = new Credits();
+        this.add(credits);
+        this.revalidate();
+        this.repaint();
     }
 
     // Exits the game.
