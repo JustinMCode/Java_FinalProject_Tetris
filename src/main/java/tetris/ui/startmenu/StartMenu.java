@@ -22,6 +22,8 @@ package main.java.tetris.ui.startmenu;
 
 import java.awt.*;
 import javax.swing.*;
+
+import main.java.tetris.Game.SinglePlayer;
 import main.java.tetris.ui.UIConstants;
 
 /*
@@ -92,6 +94,13 @@ public class StartMenu extends JFrame {
     public void startSinglePlayer() {
         // TODO: Implement single-player start logic
         JOptionPane.showMessageDialog(this, "Starting Single-player...");
+        this.getContentPane().removeAll();
+        SinglePlayer SPGame = new SinglePlayer();
+        this.add(SPGame);
+        this.revalidate();
+        this.repaint();
+        //game.requestFocusInWindow(); useless for now
+
     }
 
     /*
