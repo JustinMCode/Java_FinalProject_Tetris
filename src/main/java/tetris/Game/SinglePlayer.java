@@ -1,5 +1,7 @@
 package main.java.tetris.Game;
 
+import main.java.tetris.audio.AudioManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,7 +18,6 @@ public class SinglePlayer extends JPanel {
         setBackground(Color.GRAY);
         board = new int [width][height];
         GameOver = false;
-
 
     }
 }

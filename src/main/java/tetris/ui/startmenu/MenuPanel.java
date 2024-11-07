@@ -20,6 +20,7 @@
 
 package main.java.tetris.ui.startmenu;
 
+import main.java.tetris.audio.AudioManager;
 import main.java.tetris.ui.UIConstants;
 import main.java.tetris.ui.ButtonAction;
 import main.java.tetris.ui.components.ButtonFactory;
@@ -66,7 +67,9 @@ public class MenuPanel extends JPanel {
             // Add vertical spacing and button to the panel
             add(Box.createVerticalStrut(UIConstants.BUTTON_SPACING));
             add(button);
+
         }
+        AudioManager.playMusic();
     }
 
     // Returns the button associated with the specified ButtonAction.
