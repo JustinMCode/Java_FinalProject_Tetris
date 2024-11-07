@@ -1,3 +1,16 @@
+/*
+ * AudioManager.java
+ *
+ * This class is responsible for all audio in Tetris game
+ * It uses a music tracks and sound effects(in development)
+ *
+ * Author: Daniyar Alimkhanov
+ * Last Updated Date: 11/6/2024
+ *
+ * Usage:
+ *   - Can be controlled by Options class
+ */
+
 package main.java.tetris.audio;
 
 

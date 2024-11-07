@@ -1,3 +1,15 @@
+/*
+ * Options.java
+ *
+ * This class provides the user option to adjust audio(sound and music) settings, choose the track music.
+ *
+ * Author: Daniyar Alimkhanov
+ * Last Updated Date: 11/6/2024
+ *
+ * Dependent: AudioManager
+ */
+
+
 package main.java.tetris.Game;
 
 import main.java.tetris.audio.AudioManager;
