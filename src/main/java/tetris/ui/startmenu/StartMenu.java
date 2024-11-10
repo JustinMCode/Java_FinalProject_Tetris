@@ -97,7 +97,7 @@ public class StartMenu extends JFrame {
      */
     public void startSinglePlayer() {
         // TODO: Implement single-player start logic
-        JOptionPane.showMessageDialog(this, "Starting Single-player...");
+        //JOptionPane.showMessageDialog(this, "Starting Single-player...");
         this.getContentPane().removeAll();
         SinglePlayer SPGame = new SinglePlayer();
         this.add(SPGame);
@@ -113,7 +113,7 @@ public class StartMenu extends JFrame {
      */
     public void startMultiplayer() {
         // TODO: Implement multiplayer start logic
-        JOptionPane.showMessageDialog(this, "Starting Multiplayer...");
+        //JOptionPane.showMessageDialog(this, "Starting Multiplayer...");
         this.getContentPane().removeAll();
         MultiPlayer MPGame = new MultiPlayer();
         this.add(MPGame);
@@ -127,7 +127,7 @@ public class StartMenu extends JFrame {
      */
     public void openOptions() {
         // TODO: Implement options menu
-        JOptionPane.showMessageDialog(this, "Opening Options...");
+        //JOptionPane.showMessageDialog(this, "Opening Options...");
         this.getContentPane().removeAll();
         Options options = new Options();
         this.add(options);
@@ -141,7 +141,7 @@ public class StartMenu extends JFrame {
      */
     public void showCredits() {
         // TODO: Implement credits display
-        JOptionPane.showMessageDialog(this, "Showing Credits...");
+        //JOptionPane.showMessageDialog(this, "Showing Credits...");
         this.getContentPane().removeAll();
         Credits credits = new Credits();
         this.add(credits);

@@ -66,9 +66,21 @@ public class AudioManager {
     public static void setMusicVolume(float volume) {
         musicVolume = volume;
         if (clip != null) {
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(musicVolume));
-        }
+            try {
+                // Try to get the MASTER_GAIN control (for controlling overall volume)
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                // If available, adjust the volume using logarithmic scaling
+                gainControl.setValue(20f * (float) Math.log10(musicVolume));
+            } catch (IllegalArgumentException e) {
+                // If MASTER_GAIN is not supported, try VOLUME control if available
+                try {
+                    FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+                    volumeControl.setValue(musicVolume); // Linear scale for volume
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("Volume control not available for this Clip.");
+                }
+            }
+        } // ignores an master_gain error
     }
 
     public static void setSoundVolume(float volume) {
