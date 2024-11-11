@@ -21,9 +21,9 @@ public class AudioManager {
     private static Clip clip;
     private static float musicVolume = 1.0f;
     private static final String[] musicTracks = {
-            "/main/resources/music/musicbox.wav",
-            "/main/resources/music/piano.wav",
-            "/main/resources/music/strings.wav"
+            "/main/resources/music/Musicbox.wav",
+            "/main/resources/music/Piano.wav",
+            "/main/resources/music/Strings.wav"
     };
     private static int currentTrack = 0;
 
@@ -69,10 +69,10 @@ public class AudioManager {
             try {
                 // Try to get the MASTER_GAIN control (for controlling overall volume)
                 FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                // If available, adjust the volume using logarithmic scaling
+                //Adjusts the volume
                 gainControl.setValue(20f * (float) Math.log10(musicVolume));
             } catch (IllegalArgumentException e) {
-                // If MASTER_GAIN is not supported, try VOLUME control if available
+                //Ignores the master_gain error
                 try {
                     FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
                     volumeControl.setValue(musicVolume); // Linear scale for volume
@@ -80,7 +80,7 @@ public class AudioManager {
                     System.out.println("Volume control not available for this Clip.");
                 }
             }
-        } // ignores an master_gain error
+        }
     }
 
     public static void setSoundVolume(float volume) {

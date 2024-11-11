@@ -56,7 +56,9 @@ public Options() {
     //Track selection
     JLabel trackSelectorLabel = new JLabel("Track");
     trackSelectorLabel.setForeground(Color.white);
-    trackLabel = new JLabel(AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()]);
+    String currentTrackPath = AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()];
+    String songName = extractSongName(currentTrackPath);  // Extract the song name
+    trackLabel = new JLabel(songName); // Use song name, not path
     trackLabel.setForeground(Color.black);
 
     leftButton = new JButton("<");
@@ -82,13 +84,27 @@ public Options() {
 
 private void changeTrack(ActionEvent e) {
     if (e.getSource() == leftButton) {
-        AudioManager.setCurrentTrack((AudioManager.getCurrentTrack()-1+AudioManager.getMusicTracks().length) % AudioManager.getMusicTracks().length);
+         AudioManager.setCurrentTrack(AudioManager.getCurrentTrack() % AudioManager.getMusicTracks().length);
     } else if (e.getSource() == rightButton) {
         AudioManager.setCurrentTrack((AudioManager.getCurrentTrack()+1) % AudioManager.getMusicTracks().length);
     }
-    trackLabel.setText(AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()]);
+    // Get the current track path (or filename)
+    String currentTrackPath = AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()];
+    // Extract the song name (filename)
+    String songName = extractSongName(currentTrackPath);
+    // Update the label with the song name (not the full path)
+    trackLabel.setText(songName);
 
 }
+    private String extractSongName(String trackPath) {
+        // Extract the song name from the file path
+        String fileName = new java.io.File(trackPath).getName();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0) {
+            return fileName.substring(0, dotIndex); // Removes the file extension
+        }
+        return fileName;
+    }
 
 private void saveSettings() {
     int musicVol = musicVolume.getValue();
