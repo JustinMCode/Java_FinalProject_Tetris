@@ -1,3 +1,14 @@
+/*
+ * Options.java
+ *
+ * This class provides the user option to adjust audio(sound and music) settings,
+ * choose the track for music and save the changes.
+ * Author: Daniyar Alimkhanov
+ * Last Updated Date: 11/11/2024
+ *
+ * Dependent: AudioManager
+ */
+
 package main.java.tetris.Game;
 
 import main.java.tetris.audio.AudioManager;
@@ -5,9 +16,6 @@ import main.java.tetris.audio.AudioManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class Options extends JPanel {
 
@@ -16,14 +24,12 @@ public class Options extends JPanel {
     private JLabel trackLabel;
     private JButton leftButton;
     private JButton rightButton;
-    private Image customImage; // To hold the custom image
 
     public Options() {
-        // 1. Change layout to GridBagLayout for better control over positioning
+        //Component positioning
         setLayout(new GridBagLayout());
         setBackground(Color.black);
-
-        GridBagConstraints gbc = new GridBagConstraints();  // To control positioning
+        GridBagConstraints gbc = new GridBagConstraints();
 
         // Music volume control
         JLabel musicLabel = new JLabel("Music");
@@ -34,11 +40,11 @@ public class Options extends JPanel {
         musicVolume.setPaintLabels(true);
         musicVolume.addChangeListener(e -> AudioManager.setMusicVolume(musicVolume.getValue() / 100.0f));
 
-        musicVolume.setPreferredSize(new Dimension(300, 40));  // Bigger slider
-        musicLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Bigger label
+        musicVolume.setPreferredSize(new Dimension(300, 40));
+        musicLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        // 2. Set GridBagConstraints for placement (move further to the left)
-        gbc.insets = new Insets(10, 10, 10, 10);  // Add some padding
+        //Component of positioning
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.weightx = 1.0;
         add(musicLabel, gbc);
 
@@ -54,8 +60,8 @@ public class Options extends JPanel {
         soundVolume.setPaintLabels(true);
         soundVolume.addChangeListener(e -> AudioManager.setSoundVolume(soundVolume.getValue() / 100.0f));
 
-        soundVolume.setPreferredSize(new Dimension(300, 40));  // Bigger slider
-        soundLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Bigger label
+        soundVolume.setPreferredSize(new Dimension(300, 40));
+        soundLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         gbc.gridy = 2;
         add(soundLabel, gbc);
@@ -89,7 +95,7 @@ public class Options extends JPanel {
         trackPanel.add(trackLabel);
         trackPanel.add(rightButton);
 
-        // Set background and foreground colors
+        //Background and foreground colors
         soundVolume.setBackground(Color.black);
         soundVolume.setForeground(Color.white);
         musicVolume.setBackground(Color.black);
@@ -99,7 +105,6 @@ public class Options extends JPanel {
         trackLabel.setBackground(Color.black);
         trackLabel.setForeground(Color.white);
 
-        // 3. Place track selection more to the left
         gbc.gridy = 4;
         add(trackSelectorLabel, gbc);
 
@@ -112,33 +117,6 @@ public class Options extends JPanel {
         gbc.gridy = 6;
         add(saveButton, gbc);
 
-        // Load the custom image from the file path
-        //loadCustomImage();
-    }
-
-    // Method to load the custom image
-    private void loadCustomImage() {
-        try {
-            File imageFile = new File("src/main/resources/images/placeholder.png");
-
-            if (imageFile.exists()) {
-                System.out.println("Image found at: " + imageFile.getAbsolutePath());
-                customImage = ImageIO.read(imageFile);  // Load the image
-                repaint();  // Repaint the panel after loading the image
-            } else {
-                System.out.println("Image not found at: " + imageFile.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();  // Handle error if image is not found
-        }
-    }
-
-    // Override the paintComponent method to draw the image at the correct size
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-            // Scale the image to fit the panel size (you can modify this to resize as needed)
-            g.drawImage(customImage, 550, 50, 400, 700, this);
     }
 
     private void changeTrack(ActionEvent e) {
