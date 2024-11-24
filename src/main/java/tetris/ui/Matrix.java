@@ -11,7 +11,7 @@ public class Matrix extends JPanel {
     private static final int BOARD_HEIGHT = 20;
     private static final int CELL_SIZE = 30;
     //creating tetris grid
-    private int[][] tetris_grid;
+    private final int[][] tetris_grid;
 
     //Create the matrix board
     public Matrix() {
