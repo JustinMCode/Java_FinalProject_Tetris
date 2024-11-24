@@ -6,7 +6,7 @@
  * the corresponding buttons in the menu.
  *
  * Authors: Justin Morgan
- * Last Updated Date: 11/3/2024
+ * Last Updated Date: 11/24/2024
  *
  * Usage:
  *   - Use ButtonAction values to identify specific actions in the StartMenu.
@@ -16,7 +16,7 @@
  *   - Java AWT Color class for defining button colors
  */
 
-package main.java.tetris.ui;
+package main.java.tetris.ui.components;
 
 import java.awt.Color;
 

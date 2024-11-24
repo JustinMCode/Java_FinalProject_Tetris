@@ -1,3 +1,5 @@
+// Can get removed, was broken up for UI purposes, the game board is created in /model/GameBoard
+
 package main.java.tetris.ui;
 
 import javax.swing.*;

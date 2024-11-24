@@ -22,8 +22,8 @@ package main.java.tetris.ui.startmenu;
 
 import main.java.tetris.audio.AudioManager;
 import main.java.tetris.ui.UIConstants;
-import main.java.tetris.ui.ButtonAction;
-import main.java.tetris.ui.components.ButtonFactory;
+import main.java.tetris.ui.components.ButtonAction;
+import main.java.tetris.utility.ButtonFactory;
 
 import java.awt.*;
 import javax.swing.*;

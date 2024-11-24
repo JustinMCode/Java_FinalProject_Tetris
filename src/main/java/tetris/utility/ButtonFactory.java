@@ -6,7 +6,7 @@
  * and includes hover effects for improved interactivity.
  *
  * Author: Justin Morgan
- * Last Updated Date: 11/3/2024
+ * Last Updated Date: 11/24/2024
  *
  * Usage:
  *   - Use `createColoredButton` to generate buttons with a consistent look and feel.
@@ -17,7 +17,7 @@
  *   - UIConstants for font settings and default button styles
  */
 
-package main.java.tetris.ui.components;
+package main.java.tetris.utility;
 
 import java.awt.*;
 import javax.swing.*;

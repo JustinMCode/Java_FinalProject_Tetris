@@ -1,52 +1,39 @@
 /*
  * StartMenu.java
  *
- * This class represents the main menu of the Tetris game, assembling the primary UI components
- * and initializing the JFrame. The StartMenu provides options for single-player and multiplayer modes,
- * accessing game options, viewing credits, and exiting the game.
+ * This class represents the main menu of the Tetris game. It provides the user
+ * interface for navigating between different game modes and settings. The StartMenu
+ * includes options for single-player mode, multiplayer mode, settings, and credits.
+ * It also displays the game's title and a placeholder image.
  *
  * Author: Justin Morgan
- * Last Updated Date: 11/3/2024
+ * Last Updated Date: 11/24/2024
  *
  * Usage:
  *   - Instantiate StartMenu to initialize and display the main menu UI for the Tetris game.
- *   - Button actions for different game modes and options are handled through action methods.
+ *   - Components like TitlePanel, MenuPanel, and TitleImagePanel are added for a structured layout.
  *
  * Dependencies:
- *   - Java AWT and Swing libraries
- *   - UIConstants for consistent UI settings
- *   - TitlePanel, MenuPanel, TitleImagePanel components for structured layout
+ *   - Java AWT and Swing libraries for UI components
+ *   - TitlePanel for the game's title display
+ *   - MenuPanel for menu buttons
+ *   - TitleImagePanel for the game's placeholder image
+ *   - StartMenuActionHandler for handling button actions
  */
 
 package main.java.tetris.ui.startmenu;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import main.java.tetris.Game.Credits;
-import main.java.tetris.Game.MultiPlayer;
-import main.java.tetris.Game.Options;
-import main.java.tetris.Game.SinglePlayer;
 import main.java.tetris.ui.UIConstants;
 
-/*
- * StartMenu class represents the main menu of the Tetris game.
- * It assembles the UI components and initializes the frame.
- */
-public class StartMenu extends JFrame {
+// StartMenu class represents the main menu of the Tetris game.
+public class StartMenu extends JPanel {
 
-    // Constructor to set up the StartMenu frame and its components.
     public StartMenu() {
-        // Set up the frame properties
-        setTitle(UIConstants.GAME_TITLE);
-        setSize(UIConstants.WINDOW_WIDTH, UIConstants.WINDOW_HEIGHT);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        // Create the main panel with a BorderLayout
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.BLACK);
+        // Set up the layout and background color
+        setLayout(new BorderLayout());
+        setBackground(Color.BLACK);
 
         // Create components for different sections of the main menu
         TitlePanel titlePanel = new TitlePanel();
@@ -63,94 +50,20 @@ public class StartMenu extends JFrame {
         JPanel rightPanel = createRightPanel(titleImagePanel);
 
         // Add left and right panels to the main panel
-        mainPanel.add(leftPanel, BorderLayout.CENTER);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
-
-        // Add the main panel to the frame
-        add(mainPanel);
+        add(leftPanel, BorderLayout.CENTER);
+        add(rightPanel, BorderLayout.EAST);
     }
 
-    // Creates and returns the right panel containing the title image panel and spacing.
     private JPanel createRightPanel(JPanel titleImagePanel) {
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.BLACK);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
-        // Add vertical strut for top spacing to separate titleImagePanel from top of panel
         rightPanel.add(Box.createVerticalStrut(UIConstants.RIGHT_PANEL_TOP_SPACING));
-
-        // Set alignment for the titleImagePanel to be centered horizontally
         titleImagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Add the placeholderPanel (e.g., title image) to the rightPanel
         rightPanel.add(titleImagePanel);
-
-        // Add vertical strut for bottom spacing to separate titleImagePanel from bottom of panel
         rightPanel.add(Box.createVerticalStrut(UIConstants.RIGHT_PANEL_BOTTOM_SPACING));
 
         return rightPanel;
-    }
-
-    /*
-     * Starts a single-player game.
-     * Displays a message as a placeholder for single-player game start logic.
-     */
-    public void startSinglePlayer() {
-        // TODO: Implement single-player start logic
-        //JOptionPane.showMessageDialog(this, "Starting Single-player...");
-        this.getContentPane().removeAll();
-        SinglePlayer SPGame = new SinglePlayer();
-        this.add(SPGame);
-        this.revalidate();
-        this.repaint();
-        //game.requestFocusInWindow(); useless for now
-
-    }
-
-    /*
-     * Starts a multiplayer game.
-     * Displays a message as a placeholder for multiplayer game start logic.
-     */
-    public void startMultiplayer() {
-        // TODO: Implement multiplayer start logic
-        //JOptionPane.showMessageDialog(this, "Starting Multiplayer...");
-        this.getContentPane().removeAll();
-        MultiPlayer MPGame = new MultiPlayer();
-        this.add(MPGame);
-        this.revalidate();
-        this.repaint();
-    }
-
-    /*
-     * Opens the options menu.
-     * Displays a message as a placeholder for options menu functionality.
-     */
-    public void openOptions() {
-        // TODO: Implement options menu
-        //JOptionPane.showMessageDialog(this, "Opening Options...");
-        this.getContentPane().removeAll();
-        Options options = new Options();
-        this.add(options);
-        this.revalidate();
-        this.repaint();
-    }
-
-    /*
-     * Shows the credits for the game.
-     * Displays a message as a placeholder for credits functionality.
-     */
-    public void showCredits() {
-        // TODO: Implement credits display
-        //JOptionPane.showMessageDialog(this, "Showing Credits...");
-        this.getContentPane().removeAll();
-        Credits credits = new Credits();
-        this.add(credits);
-        this.revalidate();
-        this.repaint();
-    }
-
-    // Exits the game.
-    public void exitGame() {
-        System.exit(0);
     }
 }

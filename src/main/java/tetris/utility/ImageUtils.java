@@ -2,16 +2,15 @@
  * ImageUtils.java
  *
  * This class provides utility methods for loading and scaling images in the Tetris game project.
- * It includes methods to create an image label with an option to scale the image to a specified width
- * while maintaining the aspect ratio. This utility class ensures that images are displayed
- * consistently across the application.
+ * It includes methods to load an image as an Image object or a JLabel, with options for scaling.
+ * This utility class ensures that images are displayed consistently across the application.
  *
  * Authors: Justin Morgan
- * Last Updated Date: 11/3/2024
+ * Last Updated Date: 11/24/2024
  *
  * Usage:
  *   - Use `createImageLabel` to load an image from the specified path and scale it for consistent display.
- *   - If the image fails to load, an error label will be shown instead.
+ *   - Use `loadImage` to load an Image object directly for rendering purposes.
  *
  * Dependencies:
  *   - Java AWT and Swing libraries
@@ -35,6 +34,17 @@ import main.java.tetris.ui.UIConstants;
 public class ImageUtils {
     private static final Logger LOGGER = Logger.getLogger(ImageUtils.class.getName());
 
+    //Loads an image from the specified path as an Image object.
+    public static Image loadImage(String imagePath) {
+        try {
+            // Load the image as an ImageIcon and return its Image
+            return new ImageIcon(Objects.requireNonNull(ImageUtils.class.getResource(imagePath))).getImage();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error loading image: " + imagePath, e);
+            return null; // Return null if the image cannot be loaded
+        }
+    }
+
     /*
      * Loads an image from the specified path and scales it to the given width.
      * The height is adjusted to maintain the aspect ratio.
@@ -42,26 +52,26 @@ public class ImageUtils {
     public static JLabel createImageLabel(String imagePath, int width) {
         ImageIcon imageIcon;
         try {
-            // Attempts to load the image from the path you specify
+            // Attempts to load the image from the specified path
             imageIcon = new ImageIcon(Objects.requireNonNull(ImageUtils.class.getResource(imagePath)));
             if (imageIcon.getImageLoadStatus() != MediaTracker.COMPLETE) {
                 throw new Exception("Image not loaded");
             }
 
-            // Get loaded image and scale to specific width; height is auto-adjusted
+            // Get the loaded image and scale to the specified width; height is auto-adjusted
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
             imageIcon = new ImageIcon(scaledImage);
 
-            // Create JLabel to display image, centered both horizontally and vertically
+            // Create JLabel to display the image, centered both horizontally and vertically
             JLabel imageLabel = new JLabel(imageIcon);
             imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
             imageLabel.setVerticalAlignment(SwingConstants.CENTER);
             return imageLabel;
 
-            // Error message if loading image fails
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error loading image: " + imagePath, e);
+            // Return an error label if the image cannot be loaded
             JLabel errorLabel = new JLabel("Image not found", SwingConstants.CENTER);
             errorLabel.setForeground(Color.LIGHT_GRAY);
             errorLabel.setFont(new Font(UIConstants.FONT_NAME, Font.PLAIN, UIConstants.ERROR_FONT_SIZE));

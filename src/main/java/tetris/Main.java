@@ -5,7 +5,7 @@
  * the StartMenu and ensures that the UI is created on the Event Dispatch Thread (EDT).
  *
  * Authors: Daniyar Alimkhanov, Lauren Gregory, Justin Morgan
- * Last Updated Date: 11/3/2024
+ * Last Updated Date: 11/24/2024
  *
  * Usage:
  *   - Run this class to start the Tetris application.
@@ -18,9 +18,9 @@
 
 package main.java.tetris;
 
-import javax.swing.SwingUtilities;
 import main.java.tetris.ui.startmenu.StartMenu;
 
+import javax.swing.*;
 
 public class Main {
 
@@ -29,11 +29,16 @@ public class Main {
      * It creates the StartMenu on the Event Dispatch Thread (EDT) to ensure thread safety.
      */
     public static void main(String[] args) {
-        // Ensure GUI is created on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            // Create and display the StartMenu
-            StartMenu startMenu = new StartMenu();
-            startMenu.setVisible(true);  // Make the StartMenu window visible
+            // Create the main JFrame
+            JFrame frame = new JFrame("Tetris");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1000, 800);
+            frame.setLocationRelativeTo(null);
+
+            // Set the StartMenu as the initial content pane
+            frame.setContentPane(new StartMenu());
+            frame.setVisible(true);
         });
     }
 }
