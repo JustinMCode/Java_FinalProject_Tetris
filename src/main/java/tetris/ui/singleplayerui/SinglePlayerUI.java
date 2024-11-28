@@ -55,6 +55,11 @@ public class SinglePlayerUI {
         nextPiecePanel = createNextPiecePanel(); // Create next panel
         nextPiecePanel.setBounds(NEXT_PANEL_X, NEXT_PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT); // Position it properly
 
+        // Create and configure the rainbow-colored title label
+        JLabel titleLabel = new JLabel(RAINBOW_TITLE_TEXT, SwingConstants.CENTER);
+        titleLabel.setFont(TITLE_FONT);
+        titleLabel.setBounds(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+
         // Create the "Back" button using ButtonFactory
         JButton backButton = ButtonFactory.createColoredButton(BACK_BUTTON_TEXT, BACK_BUTTON_COLOR);
         backButton.setBounds(BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
@@ -69,6 +74,7 @@ public class SinglePlayerUI {
         });
 
         // Add all components to the parent SinglePlayer panel
+        parent.add(titleLabel);
         parent.add(gameBoardUI);     // Add the game board
         parent.add(scorePanel);      // Add the score panel
         parent.add(nextPiecePanel);  // Add the next piece panel
