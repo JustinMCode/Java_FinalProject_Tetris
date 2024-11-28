@@ -12,6 +12,8 @@
 package main.java.tetris.Game;
 
 import main.java.tetris.audio.AudioManager;
+import main.java.tetris.ui.startmenu.StartMenu;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,6 +25,7 @@ public class Options extends JPanel {
     private JLabel trackLabel;
     private JButton leftButton;
     private JButton rightButton;
+    private JButton backButton;
 
     public Options() {
         //Sets the background and layout form the panel
@@ -34,6 +37,7 @@ public class Options extends JPanel {
         SoundControl(gbc);
         TrackSetup(gbc);
         SaveButton(gbc);
+        BackButton(gbc);
     }
 
     //Music volume/position control function
@@ -179,5 +183,29 @@ public class Options extends JPanel {
         //Updates the audio manager with the new volume
         AudioManager.setMusicVolume(musicVol / 100.0f);
         AudioManager.setSoundVolume(soundVol / 100.0f);
+    }
+
+    //Creates the back button in the Options screen
+    private void BackButton(GridBagConstraints gbc) {
+        backButton = new JButton("Back");
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));  // Font styling for the back button
+        backButton.setForeground(Color.black);  // Text color
+        backButton.setBackground(Color.green);  // Background color for Back button
+        backButton.setPreferredSize(new Dimension(200, 40)); // Button size
+
+        // Action to go back to the start menu when the Back button is clicked
+        backButton.addActionListener(e -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            int currentTrackIndex = AudioManager.getCurrentTrack();
+            frame.getContentPane().removeAll(); // Remove the current options screen
+            frame.getContentPane().add(new StartMenu()); // Add the StartMenu panel
+            AudioManager.setCurrentTrack(currentTrackIndex);
+            frame.revalidate(); // Refresh the UI
+            frame.repaint();
+        });
+
+        // Add Back button to the layout
+        gbc.gridy = 7;
+        add(backButton, gbc);
     }
 }
