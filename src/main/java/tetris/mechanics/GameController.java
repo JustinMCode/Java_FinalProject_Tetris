@@ -43,6 +43,8 @@ public class GameController {
     private final Movement movement;
     private final GameBoardUI gameBoardUI;
     private Timer timer;
+    private JLabel scoreLabel;
+    private int score;
 
     /*
      * Constructor: Initializes the game controller, sets up the game board and UI components,
@@ -52,9 +54,15 @@ public class GameController {
         this.gameBoard = new GameBoard();
         this.movement = new Movement(gameBoard);
         this.gameBoardUI = new GameBoardUI(gameBoard, null);
+        this.score = 0;
         initKeyListener();
         spawnNewPiece();
         initTimer();
+    }
+
+    public void setScoreLabel(JLabel scoreLabel) {
+        this.scoreLabel = scoreLabel;
+        updateScoreDisplay();
     }
 
     private void spawnNewPiece() {
@@ -75,18 +83,26 @@ public class GameController {
                     null,
                     null);
             if (option == JOptionPane.YES_OPTION) {
-                resetGame();
+                resetGame();  // Reset the game when "Yes" is clicked
             } else {
-                System.exit(0);
+                System.exit(0);  // Exit if "No" is clicked
             }
         }
     }
 
     private void resetGame() {
         gameBoard.clearBoard();
+        score = 0;
+        updateScoreDisplay();
         spawnNewPiece();
         timer.start();
         gameBoardUI.repaint();
+    }
+
+    private void updateScoreDisplay() {
+        if (scoreLabel != null) {
+            scoreLabel.setText("Score: " + score);
+        }
     }
 
     private void initTimer() {
@@ -160,6 +176,8 @@ public class GameController {
                     gameBoard.setCell(x, 0, 0);
                 }
                 y++;
+                score += 100;
+                updateScoreDisplay();
             }
         }
     }
