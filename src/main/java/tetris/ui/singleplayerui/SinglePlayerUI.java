@@ -27,6 +27,7 @@ import main.java.tetris.Game.SinglePlayer;
 import main.java.tetris.mechanics.GameController;
 import main.java.tetris.utility.ButtonFactory;
 import main.java.tetris.ui.startmenu.StartMenu;
+import main.java.tetris.model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +38,8 @@ public class SinglePlayerUI {
 
     private JPanel scorePanel;
     private JPanel nextPiecePanel;
+    private static final int CELL_SIZE = 30; // Add this constant in SinglePlayerUI
+
 
     public SinglePlayerUI(SinglePlayer parent, GameController gameController) {
         // Set the parent layout to null for manual positioning of components
@@ -52,7 +55,7 @@ public class SinglePlayerUI {
         scorePanel.setBounds(SCORE_PANEL_X, SCORE_PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT);  // Using PANEL_WIDTH and PANEL_HEIGHT
 
         // Create and configure the "Next" panel
-        nextPiecePanel = createNextPiecePanel(); // Create next panel
+        nextPiecePanel = createNextPiecePanel(gameController); // Pass gameController to this method
         nextPiecePanel.setBounds(NEXT_PANEL_X, NEXT_PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT); // Position it properly
 
         // Create and configure the rainbow-colored title label
@@ -81,6 +84,7 @@ public class SinglePlayerUI {
         parent.add(backButton);      // Add the back button
     }
 
+
     // Creates the score panel and initializes the score label
     private JPanel createScorePanel(GameController gameController) {
         JPanel panel = new JPanel();
@@ -99,18 +103,56 @@ public class SinglePlayerUI {
         return panel;
     }
 
-    // Creates the next piece panel
-    private JPanel createNextPiecePanel() {
-        JPanel panel = new JPanel();
-        panel.setBackground(PANEL_BACKGROUND_COLOR);
-        panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createLineBorder(PANEL_BORDER_COLOR, PANEL_BORDER_THICKNESS));
+    private JPanel createNextPiecePanel(GameController gameController) {
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Piece nextPiece = gameController.getNextPiece();
+                if (nextPiece != null) {
+                    drawNextPiece(g, nextPiece);
+                }
+            }
 
-        // Create the label for the next piece
-        JLabel nextPieceLabel = new JLabel(NEXT_LABEL_TEXT, SwingConstants.CENTER);
-        nextPieceLabel.setFont(PANEL_FONT);
-        panel.add(nextPieceLabel, BorderLayout.CENTER);
+            private void drawNextPiece(Graphics g, Piece nextPiece) {
+                int[][] shape = nextPiece.getShape();
+                Color color = nextPiece.getColor();
+
+                // Center the piece in the panel
+                int pieceWidth = shape[0].length;
+                int pieceHeight = shape.length;
+                int offsetX = (getWidth() - pieceWidth * CELL_SIZE) / 2;
+                int offsetY = (getHeight() - pieceHeight * CELL_SIZE) / 2;
+
+                for (int i = 0; i < pieceHeight; i++) {
+                    for (int j = 0; j < pieceWidth; j++) {
+                        if (shape[i][j] != 0) {
+                            int x = offsetX + j * CELL_SIZE;
+                            int y = offsetY + i * CELL_SIZE;
+
+                            g.setColor(color);
+                            g.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+                            g.setColor(color.darker());
+                            g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
+                        }
+                    }
+                }
+            }
+        };
+
+        panel.setBackground(PANEL_BACKGROUND_COLOR);
+        panel.setBorder(BorderFactory.createLineBorder(PANEL_BORDER_COLOR, PANEL_BORDER_THICKNESS));
+        panel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+
+        // Refresh panel whenever the next piece changes
+        gameController.getGameBoardUI().addPropertyChangeListener(evt -> {
+            if ("nextPiece".equals(evt.getPropertyName())) {
+                panel.repaint();
+            }
+        });
 
         return panel;
     }
+
+
 }

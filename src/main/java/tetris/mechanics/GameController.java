@@ -1,24 +1,3 @@
-/*
- * GameController.java
- *
- * This class controls the game logic for Tetris, including piece movement, rotation,
- * collision detection, and game board updates. It also manages the game state and user input.
- *
- * Author: Justin Morgan, Lauren Greg
- * Last Updated Date: 11/24/2024
- *
- * Usage:
- *   - Instantiate GameController to manage the game mechanics and UI updates.
- *   - The controller initializes the game board, spawns pieces, and handles user input.
- *
- * Dependencies:
- *   - Java AWT and Swing libraries
- *   - GameBoard for managing the game grid
- *   - GameBoardUI for rendering the game board and pieces
- *   - Piece and PieceType for handling individual game pieces
- *   - Movement for collision detection and movement logic
- */
-
 package main.java.tetris.mechanics;
 
 import main.java.tetris.model.Piece;
@@ -32,24 +11,17 @@ import java.util.Random;
 
 import static main.java.tetris.mechanics.MechanicsConstants.*;
 
-/*
- * GameController class manages the core game logic, including piece spawning, movement,
- * line clearing, and user input handling.
- */
 public class GameController {
 
     private final GameBoard gameBoard;
     private Piece currentPiece;
+    private Piece nextPiece;
     private final Movement movement;
     private final GameBoardUI gameBoardUI;
     private Timer timer;
     private JLabel scoreLabel;
     private int score;
 
-    /*
-     * Constructor: Initializes the game controller, sets up the game board and UI components,
-     * and starts the game loop.
-     */
     public GameController() {
         this.gameBoard = new GameBoard();
         this.movement = new Movement(gameBoard);
@@ -65,13 +37,21 @@ public class GameController {
         updateScoreDisplay();
     }
 
-    private void spawnNewPiece() {
-        // Select a random piece type
-        PieceType type = PieceType.values()[new Random().nextInt(PieceType.values().length)];
-        currentPiece = new Piece(type);
-        gameBoardUI.setCurrentPiece(currentPiece);
+    public Piece getNextPiece() {
+        return nextPiece;
+    }
 
-        // Check if the new piece can be placed on the board
+    private void spawnNewPiece() {
+        if (nextPiece == null) {
+            nextPiece = new Piece(PieceType.values()[new Random().nextInt(PieceType.values().length)]);
+        }
+
+        currentPiece = nextPiece;
+        nextPiece = new Piece(PieceType.values()[new Random().nextInt(PieceType.values().length)]);
+
+        gameBoardUI.setCurrentPiece(currentPiece);
+        gameBoardUI.setNextPiece(nextPiece); // Triggers property change
+
         if (!movement.canMove(currentPiece, currentPiece.getX(), currentPiece.getY())) {
             timer.stop();
             int option = JOptionPane.showOptionDialog(gameBoardUI,
@@ -83,9 +63,9 @@ public class GameController {
                     null,
                     null);
             if (option == JOptionPane.YES_OPTION) {
-                resetGame();  // Reset the game when "Yes" is clicked
+                resetGame();
             } else {
-                System.exit(0);  // Exit if "No" is clicked
+                System.exit(0);
             }
         }
     }
