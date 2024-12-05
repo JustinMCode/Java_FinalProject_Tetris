@@ -23,11 +23,12 @@
 
 package main.java.tetris.ui.singleplayerui;
 
+import main.java.tetris.model.*;
 import main.java.tetris.Game.SinglePlayer;
-import main.java.tetris.mechanics.GameController;
 import main.java.tetris.utility.ButtonFactory;
 import main.java.tetris.ui.startmenu.StartMenu;
-import main.java.tetris.model.*;
+import main.java.tetris.mechanics.GameController;
+import main.java.tetris.ui.components.GameBoardUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,8 +37,6 @@ import static main.java.tetris.ui.singleplayerui.SinglePlayerUIConstants.*;
 
 public class SinglePlayerUI {
 
-    private JPanel scorePanel;
-    private JPanel nextPiecePanel;
     private static final int CELL_SIZE = 30; // Add this constant in SinglePlayerUI
 
 
@@ -51,11 +50,11 @@ public class SinglePlayerUI {
         gameBoardUI.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Add a border to the game board
 
         // Create and configure the "Score" panel
-        scorePanel = createScorePanel(gameController);  // Use this method to create and initialize the score panel
+        JPanel scorePanel = createScorePanel(gameController);  // Use this method to create and initialize the score panel
         scorePanel.setBounds(SCORE_PANEL_X, SCORE_PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT);  // Using PANEL_WIDTH and PANEL_HEIGHT
 
         // Create and configure the "Next" panel
-        nextPiecePanel = createNextPiecePanel(gameController); // Pass gameController to this method
+        JPanel nextPiecePanel = createNextPiecePanel(gameController); // Pass gameController to this method
         nextPiecePanel.setBounds(NEXT_PANEL_X, NEXT_PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT); // Position it properly
 
         // Create and configure the rainbow-colored title label

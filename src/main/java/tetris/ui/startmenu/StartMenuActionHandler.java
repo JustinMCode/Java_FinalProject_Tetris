@@ -21,6 +21,7 @@
 
 package main.java.tetris.ui.startmenu;
 
+import main.java.tetris.Game.MultiPlayer;
 import main.java.tetris.Game.Options;
 import main.java.tetris.Game.SinglePlayer;
 import main.java.tetris.ui.components.ButtonAction;
@@ -50,7 +51,13 @@ public class StartMenuActionHandler implements ActionListener {
                     frame.revalidate();
                     frame.repaint();
                 }
-                case MULTIPLAYER -> System.out.println("Multiplayer not implemented");
+                case MULTIPLAYER -> {
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startMenu);
+                    frame.getContentPane().removeAll();
+                    frame.getContentPane().add(new MultiPlayer());
+                    frame.revalidate();
+                    frame.repaint();
+                }
                 case OPTIONS -> {
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startMenu);
                     frame.getContentPane().removeAll();

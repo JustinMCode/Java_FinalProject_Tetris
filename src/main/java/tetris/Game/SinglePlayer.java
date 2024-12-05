@@ -1,23 +1,21 @@
 /*
  * SinglePlayer.java
  *
- * This class represents the single-player game mode of the Tetris game.
- * It sets up the gameplay UI, including a customizable background image
- * and game logic integration. The SinglePlayer panel is designed to be
- * manually positioned and rendered within a parent JFrame.
+ * This class represents the Single Player mode in Tetris. It sets up the game mechanics,
+ * user interface, and background for a standalone single-player experience.
  *
- * Author: Justin Morgan, Lauren Greg
- * Last Updated Date: 11/24/2024
+ * Author: Justin Morgan
+ * Last Updated Date: 12/03/2024
  *
- * Usage:
- *   - Instantiate SinglePlayer to initialize and display the single-player game UI.
- *   - The game controller handles the game logic and interacts with the UI components.
+ * Features:
+ * - Customizable background image with fallback color.
+ * - Game controller initialization with key bindings for gameplay.
+ * - Integration with SinglePlayerUI for layout and additional UI components.
  *
  * Dependencies:
- *   - Java AWT and Swing libraries
- *   - SinglePlayerUI for structured UI setup
- *   - GameController for game mechanics and state management
- *   - ImageUtils for loading and scaling the background image
+ * - GameController for game logic.
+ * - SinglePlayerUI for user interface setup.
+ * - ImageUtils for loading and managing images.
  */
 
 package main.java.tetris.Game;
@@ -26,61 +24,82 @@ import main.java.tetris.utility.ImageUtils;
 import main.java.tetris.mechanics.GameController;
 import main.java.tetris.ui.singleplayerui.SinglePlayerUI;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
+import javax.swing.*;
+import java.util.HashMap;
+import java.awt.event.KeyEvent;
 
-/*
- * SinglePlayer class sets up the single-player game mode,
- * including a customizable background image and a UI managed by SinglePlayerUI.
- */
+
 public class SinglePlayer extends JPanel {
 
-    // Constants
+    // Constants for background image and fallback color
     private static final String BACKGROUND_IMAGE_PATH = "/main/resources/images/Tetris_BackgroundV7.jpg";
     private static final Color FALLBACK_BACKGROUND_COLOR = Color.GRAY;
-    private static final LayoutManager PANEL_LAYOUT = null;
+
+    // Background image to display
     private final Image backgroundImage;
 
-    // Constructor: Initializes the SinglePlayer panel.
+    // Game controller for managing gameplay
+    private GameController gameController;
+
+    /*
+     * Constructor for SinglePlayer mode.
+     * Sets up the game controller, user interface, and background display.
+     */
     public SinglePlayer() {
         // Load the background image using ImageUtils
         this.backgroundImage = ImageUtils.loadImage(BACKGROUND_IMAGE_PATH);
 
-        // Set layout to null for manual positioning
-        setLayout(PANEL_LAYOUT);
+        // Use null layout for custom component positioning
+        setLayout(null);
 
-        GameController gameController = new GameController();
+        // Initialize the game controller
+        initializeGameController();
 
-        // Initialize the UI components and layout
-        initializeUI(gameController);
+        // Initialize user interface components
+        initializeUI();
 
-        // Request focus for the game board UI to capture keyboard input during gameplay
+        // Request focus for the game board to capture key events
         SwingUtilities.invokeLater(gameController.getGameBoardUI()::requestFocusInWindow);
     }
 
+    // Initializes the game controller and configures key bindings for gameplay.
+    private void initializeGameController() {
+        // Create the key bindings map for user controls
+        Map<Integer, Runnable> keyBindings = new HashMap<>();
+
+        // Instantiate the game controller
+        gameController = new GameController(keyBindings);
+
+        // Define key bindings for single-player gameplay
+        keyBindings.put(KeyEvent.VK_LEFT, gameController::moveLeft);
+        keyBindings.put(KeyEvent.VK_RIGHT, gameController::moveRight);
+        keyBindings.put(KeyEvent.VK_DOWN, gameController::moveDown);
+        keyBindings.put(KeyEvent.VK_UP, gameController::rotate);
+    }
+
     /*
-     * Initializes the SinglePlayer UI by passing the game controller
-     * to the SinglePlayerUI class, which handles component layout and rendering.
+     * Initializes the user interface components for Single Player mode.
+     * Delegates layout setup to SinglePlayerUI.
      */
-    private void initializeUI(GameController gameController) {
-        // Delegate UI setup to SinglePlayerUI
+    private void initializeUI() {
+        // Delegate UI setup to SinglePlayerUI for better modularity
         new SinglePlayerUI(this, gameController);
     }
 
     /*
-     * Overridden paintComponent method: Draws the background image for the panel.
-     * Ensures the image covers the entire panel, scaling to fit the dimensions.
+     * Custom painting logic for the background.
+     * Displays the background image if available, otherwise uses a fallback color.
      */
     @Override
     protected void paintComponent(Graphics g) {
-        // Call the superclass implementation for default behavior
         super.paintComponent(g);
-
-        // Draw the background image, scaling it to fit the entire panel
         if (backgroundImage != null) {
+            // Scale the background image to fit the panel dimensions
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         } else {
-            // Fill the panel with a fallback color if the background image is null
+            // Use fallback color if background image is unavailable
             g.setColor(FALLBACK_BACKGROUND_COLOR);
             g.fillRect(0, 0, getWidth(), getHeight());
         }

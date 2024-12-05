@@ -31,12 +31,14 @@ public class Piece {
      * Constructor: Creates a new Piece of a given type.
      * Initializes the shape, starting position, and type of the piece.
      */
+    private static final int STARTING_Y = 0;
+    private static final int COUNTER_ROTATION_STEPS = 3;
+
     public Piece(PieceType type) {
         this.type = type;
         this.shape = SHAPES[type.ordinal()];
-        // Center the piece horizontally
-        this.x = BOARD_WIDTH / 2 - shape[0].length / 2;
-        this.y = 0;                                                 // Start at the top of the board
+        this.x = BOARD_WIDTH / 2 - shape[0].length / 2; // Center the piece horizontally
+        this.y = STARTING_Y; // Start at the top of the board
     }
 
     // Retrieves the shape matrix of the piece.
@@ -104,7 +106,7 @@ public class Piece {
 
     // Rotates the piece back to its previous orientation (90 degrees counterclockwise).
     public void rotateBack() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < COUNTER_ROTATION_STEPS; i++) {
             rotate();
         }
     }
