@@ -6,7 +6,7 @@
  * via key bindings and updates the UI accordingly.
  *
  * Author: Justin Morgan
- * Last Updated Date: 12/03/2024
+ * Last Updated Date: 12/05/2024
  *
  * Usage:
  *   - Instantiate GameController with a map of key bindings for movement and actions.
@@ -54,6 +54,12 @@ public class GameController {
     // Game Over dialog messages
     public static final String GAME_OVER_MESSAGE = "Game Over! Do you want to play again?";
     public static final String GAME_OVER_TITLE = "Game Over";
+
+    // Enum for Dialog Options
+    private enum GameOverOption {
+        RESTART,
+        MAIN_MENU
+    }
 
     public GameController(Map<Integer, Runnable> keyBindings) {
         this.gameBoard = new GameBoard();
@@ -132,45 +138,59 @@ public class GameController {
     private void handleGameOver() {
         timer.stop(); // Stop the game timer
 
-        // Show a dialog to the user with restart and main menu options
-        int option = JOptionPane.showOptionDialog(gameBoardUI,
-                GAME_OVER_MESSAGE,
-                GAME_OVER_TITLE,
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new String[]{"Restart", "Main Menu"},
-                null);
+        // Ensure the dialog is displayed on the Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            // Show a dialog to the user with restart and main menu options
+            int option = JOptionPane.showOptionDialog(gameBoardUI,
+                    GAME_OVER_MESSAGE,
+                    GAME_OVER_TITLE,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[]{"Restart", "Main Menu"},
+                    "Restart"); //
 
-        if (option == JOptionPane.YES_OPTION) {
-            resetGame(); // Restart the game
-        } else if (option == JOptionPane.NO_OPTION) {
-            returnToMainMenu(); // Navigate to the main menu
-        }
+            if (option == JOptionPane.YES_OPTION) {
+                resetGame();
+            } else if (option == JOptionPane.NO_OPTION) {
+                returnToMainMenu(); // Navigate to the main menu
+            } else {
+                returnToMainMenu();
+            }
+        });
     }
 
     // Navigates back to the main menu by replacing the current content pane.
     private void returnToMainMenu() {
-        // Get the parent JFrame
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(gameBoardUI);
+        // Ensure this runs on the Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            // Get the parent JFrame
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(gameBoardUI);
 
-        if (frame != null) {
-            // Replace the current content pane with the main menu panel
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(new main.java.tetris.ui.startmenu.StartMenu());
-            frame.revalidate(); // Refresh the JFrame to reflect changes
-            frame.repaint();
-        }
+            if (frame != null) {
+                // Replace the current content pane with the main menu panel
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(new main.java.tetris.ui.startmenu.StartMenu());
+                frame.revalidate(); // Refresh the JFrame to reflect changes
+                frame.repaint();
+            } else {
+                // If the frame is not found, log an error or handle accordingly
+                System.err.println("Unable to locate the parent JFrame.");
+            }
+        });
     }
 
     // Resets the game state to start a new game.
     private void resetGame() {
-        gameBoard.clearBoard();
-        score = 0;
-        updateScoreDisplay();
-        spawnNewPiece();
-        timer.start();
-        gameBoardUI.repaint();
+        SwingUtilities.invokeLater(() -> {
+            gameBoard.clearBoard();
+            score = 0;
+            updateScoreDisplay();
+            spawnNewPiece();
+            timer.start();
+            gameBoardUI.repaint();
+            gameBoardUI.requestFocusInWindow(); // Ensure the game board regains focus
+        });
     }
 
     // Updates the score display in the UI.
