@@ -30,12 +30,21 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.awt.event.KeyEvent;
 
-
 public class SinglePlayer extends JPanel {
 
     // Constants for background image and fallback color
     private static final String BACKGROUND_IMAGE_PATH = "/main/resources/images/Tetris_BackgroundV7.jpg";
     private static final Color FALLBACK_BACKGROUND_COLOR = Color.GRAY;
+
+    // Constants for layout settings
+    private static final int PANEL_WIDTH = 1200; // Example width
+    private static final int PANEL_HEIGHT = 800; // Example height
+
+    // Key bindings for gameplay
+    private static final int MOVE_LEFT_KEY = KeyEvent.VK_LEFT;
+    private static final int MOVE_RIGHT_KEY = KeyEvent.VK_RIGHT;
+    private static final int MOVE_DOWN_KEY = KeyEvent.VK_DOWN;
+    private static final int ROTATE_KEY = KeyEvent.VK_UP;
 
     // Background image to display
     private final Image backgroundImage;
@@ -53,6 +62,7 @@ public class SinglePlayer extends JPanel {
 
         // Use null layout for custom component positioning
         setLayout(null);
+        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
         // Initialize the game controller
         initializeGameController();
@@ -73,10 +83,10 @@ public class SinglePlayer extends JPanel {
         gameController = new GameController(keyBindings);
 
         // Define key bindings for single-player gameplay
-        keyBindings.put(KeyEvent.VK_LEFT, gameController::moveLeft);
-        keyBindings.put(KeyEvent.VK_RIGHT, gameController::moveRight);
-        keyBindings.put(KeyEvent.VK_DOWN, gameController::moveDown);
-        keyBindings.put(KeyEvent.VK_UP, gameController::rotate);
+        keyBindings.put(MOVE_LEFT_KEY, gameController::moveLeft);
+        keyBindings.put(MOVE_RIGHT_KEY, gameController::moveRight);
+        keyBindings.put(MOVE_DOWN_KEY, gameController::moveDown);
+        keyBindings.put(ROTATE_KEY, gameController::rotate);
     }
 
     /*

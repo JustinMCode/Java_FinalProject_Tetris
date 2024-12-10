@@ -1,8 +1,8 @@
 /*
  * Options.java
  *
- * This class provides the user option to adjust audio(sound and music) settings,
- * choose the track for music and save the changes.
+ * This class provides the user option to adjust audio (sound and music) settings,
+ * choose the track for music, and save the changes.
  * Author: Daniyar Alimkhanov
  * Last Updated Date: 11/11/2024
  *
@@ -20,6 +20,26 @@ import java.awt.event.ActionEvent;
 
 public class Options extends JPanel {
 
+    // Constants for layout and sizes
+    private static final int SLIDER_MIN = 0;
+    private static final int SLIDER_MAX = 100;
+    private static final int SLIDER_INITIAL = 50;
+    private static final int SLIDER_TICK_SPACING = 20;
+    private static final int SLIDER_WIDTH = 300;
+    private static final int SLIDER_HEIGHT = 40;
+
+    private static final int BUTTON_WIDTH = 200;
+    private static final int BUTTON_HEIGHT = 40;
+
+    private static final int FONT_SIZE_TITLE = 20;
+    private static final int FONT_SIZE_TRACK = 14;
+
+    private static final Color BACKGROUND_COLOR = Color.BLACK;
+    private static final Color MUSIC_LABEL_COLOR = Color.YELLOW;
+    private static final Color SOUND_LABEL_COLOR = Color.BLUE;
+    private static final Color TRACK_LABEL_COLOR = Color.GREEN;
+    private static final Color TRACK_BUTTON_COLOR = Color.GREEN;
+
     private JSlider musicVolume;
     private JSlider soundVolume;
     private JLabel trackLabel;
@@ -28,9 +48,9 @@ public class Options extends JPanel {
     private JButton backButton;
 
     public Options() {
-        //Sets the background and layout form the panel
+        // Set the background and layout for the panel
         setLayout(new GridBagLayout());
-        setBackground(Color.black);
+        setBackground(BACKGROUND_COLOR);
         GridBagConstraints gbc = new GridBagConstraints();
 
         MusicControl(gbc);
@@ -40,171 +60,135 @@ public class Options extends JPanel {
         BackButton(gbc);
     }
 
-    //Music volume/position control function
-    private void MusicControl(GridBagConstraints gbc){
+    // Music volume/position control function
+    private void MusicControl(GridBagConstraints gbc) {
         JLabel musicLabel = new JLabel("Music");
-        musicLabel.setForeground(Color.yellow);
-        musicVolume = new JSlider(0, 100, 50);
-        musicVolume.setMajorTickSpacing(20);
+        musicLabel.setForeground(MUSIC_LABEL_COLOR);
+        musicLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE_TITLE));
+
+        musicVolume = new JSlider(SLIDER_MIN, SLIDER_MAX, SLIDER_INITIAL);
+        musicVolume.setMajorTickSpacing(SLIDER_TICK_SPACING);
         musicVolume.setPaintTicks(true);
         musicVolume.setPaintLabels(true);
+        musicVolume.setPreferredSize(new Dimension(SLIDER_WIDTH, SLIDER_HEIGHT));
+        musicVolume.setBackground(BACKGROUND_COLOR);
+        musicVolume.setForeground(Color.WHITE);
         musicVolume.addChangeListener(e -> AudioManager.setMusicVolume(musicVolume.getValue() / 100.0f));
 
-        //Sets the size of music panel
-        musicVolume.setPreferredSize(new Dimension(300, 40));
-        musicLabel.setFont(new Font("Arial", Font.BOLD, 20));
-
-        //Adjusts the position of music control in order
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.weightx = 1.0;
         add(musicLabel, gbc);
         gbc.gridy = 1;
         add(musicVolume, gbc);
-
-        //Sets the color of background and numbers on the slider
-        musicVolume.setBackground(Color.black);
-        musicVolume.setForeground(Color.white);
     }
 
-    //Sound volume/position control function
-    private void SoundControl(GridBagConstraints gbc){
+    // Sound volume/position control function
+    private void SoundControl(GridBagConstraints gbc) {
         JLabel soundLabel = new JLabel("Sound");
-        soundLabel.setForeground(Color.blue);
-        soundVolume = new JSlider(0, 100, 50);
-        soundVolume.setMajorTickSpacing(20);
+        soundLabel.setForeground(SOUND_LABEL_COLOR);
+        soundLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE_TITLE));
+
+        soundVolume = new JSlider(SLIDER_MIN, SLIDER_MAX, SLIDER_INITIAL);
+        soundVolume.setMajorTickSpacing(SLIDER_TICK_SPACING);
         soundVolume.setPaintTicks(true);
         soundVolume.setPaintLabels(true);
+        soundVolume.setPreferredSize(new Dimension(SLIDER_WIDTH, SLIDER_HEIGHT));
+        soundVolume.setBackground(BACKGROUND_COLOR);
+        soundVolume.setForeground(Color.WHITE);
         soundVolume.addChangeListener(e -> AudioManager.setSoundVolume(soundVolume.getValue() / 100.0f));
 
-        //Sets the size of sound panel
-        soundVolume.setPreferredSize(new Dimension(300, 40));
-        soundLabel.setFont(new Font("Arial", Font.BOLD, 20));
-
-        //Adjusts the position of sound control in order
         gbc.gridy = 2;
         add(soundLabel, gbc);
         gbc.gridy = 3;
         add(soundVolume, gbc);
-
-        //Sets the color of background and numbers on the slider
-        soundVolume.setBackground(Color.black);
-        soundVolume.setForeground(Color.white);
     }
 
-    //Track selector/position control function
-    private void TrackSetup(GridBagConstraints gbc){
+    // Track selector/position control function
+    private void TrackSetup(GridBagConstraints gbc) {
         JLabel trackSelectorLabel = new JLabel("Track");
-        trackSelectorLabel.setForeground(Color.green);
+        trackSelectorLabel.setForeground(TRACK_LABEL_COLOR);
+        trackSelectorLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE_TITLE));
+
         String currentTrackPath = AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()];
         String songName = extractSongName(currentTrackPath);
         trackLabel = new JLabel(songName);
-        trackLabel.setForeground(Color.black);
+        trackLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE_TRACK));
+        trackLabel.setForeground(Color.WHITE);
 
-        //Sets the size of track panel
-        trackLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        trackSelectorLabel.setFont(new Font("Arial", Font.BOLD, 20));
-
-        //Adjusts the symbol for buttons
         leftButton = new JButton("<");
-        leftButton.addActionListener(this::changeTrack);
         rightButton = new JButton(">");
+        leftButton.setBackground(TRACK_BUTTON_COLOR);
+        leftButton.setForeground(Color.BLACK);
+        rightButton.setBackground(TRACK_BUTTON_COLOR);
+        rightButton.setForeground(Color.BLACK);
+        leftButton.addActionListener(this::changeTrack);
         rightButton.addActionListener(this::changeTrack);
 
-        //Adjusts the color of buttons
-        leftButton.setForeground(Color.black);
-        leftButton.setBackground(Color.green);
-        rightButton.setForeground(Color.black);
-        rightButton.setBackground(Color.green);
-
-        //Holds the track buttons and label
         JPanel trackPanel = new JPanel();
         trackPanel.setLayout(new FlowLayout());
+        trackPanel.setBackground(BACKGROUND_COLOR);
         trackPanel.add(leftButton);
         trackPanel.add(trackLabel);
         trackPanel.add(rightButton);
 
-        //Adjusts the position of track panel in order
         gbc.gridy = 4;
         add(trackSelectorLabel, gbc);
         gbc.gridy = 5;
         add(trackPanel, gbc);
-
-        //Sets the color of background, panel and track name
-        trackPanel.setBackground(Color.black);
-        trackPanel.setForeground(Color.white);
-        trackLabel.setBackground(Color.black);
-        trackLabel.setForeground(Color.white);
     }
 
-    //Logic that gives the left/right buttons to change tracks
+    // Logic to change tracks using left/right buttons
     private void changeTrack(ActionEvent e) {
-        //If left button clicked - go to previous track
         if (e.getSource() == leftButton) {
-            AudioManager.setCurrentTrack(AudioManager.getCurrentTrack() % AudioManager.getMusicTracks().length);
-        }
-        //If right button clicked - go to the next track
-        else if (e.getSource() == rightButton) {
+            AudioManager.setCurrentTrack((AudioManager.getCurrentTrack() - 1 + AudioManager.getMusicTracks().length) % AudioManager.getMusicTracks().length);
+        } else if (e.getSource() == rightButton) {
             AudioManager.setCurrentTrack((AudioManager.getCurrentTrack() + 1) % AudioManager.getMusicTracks().length);
         }
-
-        //Updates the label with the new track name
         String currentTrackPath = AudioManager.getMusicTracks()[AudioManager.getCurrentTrack()];
         String songName = extractSongName(currentTrackPath);
         trackLabel.setText(songName);
     }
 
-    //Removes the file extension of the song file path, returns just the song name
+    // Removes the file extension of the song file path, returns just the song name
     private String extractSongName(String trackPath) {
         String fileName = new java.io.File(trackPath).getName();
         int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex > 0) {
-            return fileName.substring(0, dotIndex);
-        }
-        return fileName;
+        return (dotIndex > 0) ? fileName.substring(0, dotIndex) : fileName;
     }
 
-    //Creates the save button
-    private void SaveButton(GridBagConstraints gbc){
+    // Creates the save button
+    private void SaveButton(GridBagConstraints gbc) {
         JButton saveButton = new JButton("Save");
+        saveButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         saveButton.addActionListener(e -> saveSettings());
         gbc.gridy = 6;
         add(saveButton, gbc);
     }
 
-    //Saves the chosen music/sound settings
+    // Saves the chosen music/sound settings
     private void saveSettings() {
         int musicVol = musicVolume.getValue();
         int soundVol = soundVolume.getValue();
 
-        //Prints the values(for debugging)
-        System.out.println("Music " + musicVol);
-        System.out.println("Sound " + soundVol);
-
-        //Updates the audio manager with the new volume
+        // Updates the audio manager with the new volume
         AudioManager.setMusicVolume(musicVol / 100.0f);
         AudioManager.setSoundVolume(soundVol / 100.0f);
     }
 
-    //Creates the back button in the Options screen
+    // Creates the back button in the Options screen
     private void BackButton(GridBagConstraints gbc) {
         backButton = new JButton("Back");
-        backButton.setFont(new Font("Arial", Font.BOLD, 20));  // Font styling for the back button
-        backButton.setForeground(Color.black);  // Text color
-        backButton.setBackground(Color.green);  // Background color for Back button
-        backButton.setPreferredSize(new Dimension(200, 40)); // Button size
-
-        // Action to go back to the start menu when the Back button is clicked
+        backButton.setFont(new Font("Arial", Font.BOLD, FONT_SIZE_TITLE));
+        backButton.setForeground(Color.BLACK);
+        backButton.setBackground(TRACK_BUTTON_COLOR);
+        backButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         backButton.addActionListener(e -> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            int currentTrackIndex = AudioManager.getCurrentTrack();
-            frame.getContentPane().removeAll(); // Remove the current options screen
-            frame.getContentPane().add(new StartMenu()); // Add the StartMenu panel
-            AudioManager.setCurrentTrack(currentTrackIndex);
-            frame.revalidate(); // Refresh the UI
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(new StartMenu());
+            frame.revalidate();
             frame.repaint();
         });
-
-        // Add Back button to the layout
         gbc.gridy = 7;
         add(backButton, gbc);
     }

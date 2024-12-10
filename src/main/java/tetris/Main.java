@@ -18,9 +18,8 @@
 
 package main.java.tetris;
 
-import main.java.tetris.ui.startmenu.StartMenu;
-
 import javax.swing.*;
+import main.java.tetris.ui.startmenu.StartMenu;
 
 public class Main {
 

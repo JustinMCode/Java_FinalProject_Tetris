@@ -32,9 +32,25 @@ import java.awt.event.KeyAdapter;
 
 public class MultiPlayer extends JPanel {
 
-    // Constants for background image and fallback color
+    // Constants for background
     private static final String BACKGROUND_IMAGE_PATH = "/main/resources/images/Tetris_BackgroundV7.jpg";
     private static final Color FALLBACK_BACKGROUND_COLOR = Color.GRAY;
+
+    // Panel size and dimensions
+    private static final int PANEL_WIDTH = 1200;
+    private static final int PANEL_HEIGHT = 1100;
+
+    // Key bindings for Player 1
+    private static final int PLAYER1_MOVE_LEFT = KeyEvent.VK_A;
+    private static final int PLAYER1_MOVE_RIGHT = KeyEvent.VK_D;
+    private static final int PLAYER1_MOVE_DOWN = KeyEvent.VK_S;
+    private static final int PLAYER1_ROTATE = KeyEvent.VK_W;
+
+    // Key bindings for Player 2
+    private static final int PLAYER2_MOVE_LEFT = KeyEvent.VK_LEFT;
+    private static final int PLAYER2_MOVE_RIGHT = KeyEvent.VK_RIGHT;
+    private static final int PLAYER2_MOVE_DOWN = KeyEvent.VK_DOWN;
+    private static final int PLAYER2_ROTATE = KeyEvent.VK_UP;
 
     // Background image to display
     private final Image backgroundImage;
@@ -45,9 +61,9 @@ public class MultiPlayer extends JPanel {
 
         setLayout(null); // Manual positioning for components
 
-        // Key bindings for Player 1 (WSAD)
+        // Key bindings for Player 1
         Map<Integer, Runnable> player1KeyBindings = new HashMap<>();
-        // Key bindings for Player 2 (Arrow keys)
+        // Key bindings for Player 2
         Map<Integer, Runnable> player2KeyBindings = new HashMap<>();
 
         // Initialize controllers with key bindings
@@ -55,20 +71,20 @@ public class MultiPlayer extends JPanel {
         GameController player2Controller = new GameController(player2KeyBindings);
 
         // Populate Player 1 key bindings (WSAD)
-        player1KeyBindings.put(KeyEvent.VK_A, player1Controller::moveLeft);
-        player1KeyBindings.put(KeyEvent.VK_D, player1Controller::moveRight);
-        player1KeyBindings.put(KeyEvent.VK_S, player1Controller::moveDown);
-        player1KeyBindings.put(KeyEvent.VK_W, player1Controller::rotate);
+        player1KeyBindings.put(PLAYER1_MOVE_LEFT, player1Controller::moveLeft);
+        player1KeyBindings.put(PLAYER1_MOVE_RIGHT, player1Controller::moveRight);
+        player1KeyBindings.put(PLAYER1_MOVE_DOWN, player1Controller::moveDown);
+        player1KeyBindings.put(PLAYER1_ROTATE, player1Controller::rotate);
 
         // Populate Player 2 key bindings (Arrow keys)
-        player2KeyBindings.put(KeyEvent.VK_LEFT, player2Controller::moveLeft);
-        player2KeyBindings.put(KeyEvent.VK_RIGHT, player2Controller::moveRight);
-        player2KeyBindings.put(KeyEvent.VK_DOWN, player2Controller::moveDown);
-        player2KeyBindings.put(KeyEvent.VK_UP, player2Controller::rotate);
+        player2KeyBindings.put(PLAYER2_MOVE_LEFT, player2Controller::moveLeft);
+        player2KeyBindings.put(PLAYER2_MOVE_RIGHT, player2Controller::moveRight);
+        player2KeyBindings.put(PLAYER2_MOVE_DOWN, player2Controller::moveDown);
+        player2KeyBindings.put(PLAYER2_ROTATE, player2Controller::rotate);
 
         // Create MultiplayerUI and add it to the panel
         MultiplayerUI multiplayerUI = new MultiplayerUI(player1Controller, player2Controller);
-        multiplayerUI.setBounds(0, 0, 1200, 1100);
+        multiplayerUI.setBounds(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
         add(multiplayerUI);
 
         // Add a centralized KeyListener
