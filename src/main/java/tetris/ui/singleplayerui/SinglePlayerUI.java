@@ -68,6 +68,14 @@ public class SinglePlayerUI {
 
         // Add an action listener to the button to return to the main menu
         backButton.addActionListener(e -> {
+            // Stop the game timer before navigating away
+            if (gameController.getTimer() != null) { // Ensure the timer exists
+                gameController.getTimer().stop(); // Stop the timer
+            }
+
+            gameController.resetGame(); // Reset the game state to ensure everything is cleared
+
+            // Navigate back to the main menu
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(parent);
             frame.getContentPane().removeAll(); // Clear the current content
             frame.getContentPane().add(new StartMenu()); // Add the StartMenu panel

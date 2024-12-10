@@ -6,7 +6,7 @@
  * via key bindings and updates the UI accordingly.
  *
  * Author: Justin Morgan
- * Last Updated Date: 12/05/2024
+ * Last Updated Date: 12/03/2024
  *
  * Usage:
  *   - Instantiate GameController with a map of key bindings for movement and actions.
@@ -27,6 +27,7 @@ package main.java.tetris.mechanics;
 import main.java.tetris.model.Piece;
 import main.java.tetris.model.PieceType;
 import main.java.tetris.model.GameBoard;
+import main.java.tetris.ui.gameoverUi.GameOverUI;
 import main.java.tetris.ui.components.GameBoardUI;
 
 import javax.swing.*;
@@ -54,12 +55,6 @@ public class GameController {
     // Game Over dialog messages
     public static final String GAME_OVER_MESSAGE = "Game Over! Do you want to play again?";
     public static final String GAME_OVER_TITLE = "Game Over";
-
-    // Enum for Dialog Options
-    private enum GameOverOption {
-        RESTART,
-        MAIN_MENU
-    }
 
     public GameController(Map<Integer, Runnable> keyBindings) {
         this.gameBoard = new GameBoard();
@@ -140,29 +135,23 @@ public class GameController {
 
         // Ensure the dialog is displayed on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
-            // Show a dialog to the user with restart and main menu options
-            int option = JOptionPane.showOptionDialog(gameBoardUI,
-                    GAME_OVER_MESSAGE,
-                    GAME_OVER_TITLE,
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    new String[]{"Restart", "Main Menu"},
-                    "Restart"); //
-
-            if (option == JOptionPane.YES_OPTION) {
-                resetGame();
-            } else if (option == JOptionPane.NO_OPTION) {
-                returnToMainMenu(); // Navigate to the main menu
-            } else {
-                returnToMainMenu();
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(gameBoardUI);
+            if (parentFrame == null) {
+                // If parentFrame is not found, create a dummy frame as parent
+                parentFrame = new JFrame();
+                parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
+
+            // Create and display the custom GameOverUI
+            GameOverUI dialog = new GameOverUI(parentFrame,
+                    this::resetGame,
+                    this::returnToMainMenu);
+            dialog.setVisible(true);
         });
     }
 
     // Navigates back to the main menu by replacing the current content pane.
     private void returnToMainMenu() {
-        // Ensure this runs on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             // Get the parent JFrame
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(gameBoardUI);
@@ -181,17 +170,26 @@ public class GameController {
     }
 
     // Resets the game state to start a new game.
-    private void resetGame() {
-        SwingUtilities.invokeLater(() -> {
-            gameBoard.clearBoard();
-            score = 0;
-            updateScoreDisplay();
-            spawnNewPiece();
-            timer.start();
-            gameBoardUI.repaint();
-            gameBoardUI.requestFocusInWindow(); // Ensure the game board regains focus
-        });
+    // Resets the game state to start a new game
+    public void resetGame() {
+        gameBoard.clearBoard(); // Clear the game board
+        currentPiece = null; // Remove the current piece
+        nextPiece = null; // Clear the next piece
+        score = 0; // Reset the score
+        updateScoreDisplay(); // Update the UI with the reset score
+
+        if (timer != null) { // Ensure the timer exists
+            timer.stop(); // Stop the timer to prevent it from running in the background
+        }
+
+        gameBoardUI.repaint(); // Refresh the game board UI to clear visuals
     }
+
+    // Getter for the game timer
+    public Timer getTimer() {
+        return timer; // Expose the timer instance
+    }
+
 
     // Updates the score display in the UI.
     private void updateScoreDisplay() {
@@ -288,4 +286,6 @@ public class GameController {
     public GameBoardUI getGameBoardUI() {
         return gameBoardUI;
     }
+
+
 }
