@@ -21,6 +21,7 @@
 
 package main.java.tetris.ui.startmenu;
 
+import main.java.tetris.Game.Credits;
 import main.java.tetris.Game.MultiPlayer;
 import main.java.tetris.Game.Options;
 import main.java.tetris.Game.SinglePlayer;
@@ -65,7 +66,15 @@ public class StartMenuActionHandler implements ActionListener {
                     frame.revalidate();
                     frame.repaint();
                 }
-                case CREDITS -> System.out.println("Credits not implemented");
+                case CREDITS -> {
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startMenu);
+                    frame.getContentPane().removeAll();
+                    frame.getContentPane().add(new Credits());
+                    frame.revalidate();
+                    frame.repaint();
+                }
+                        //System.out.println("Credits not implemented");
+
                 case EXIT -> System.exit(0);
             }
         } catch (IllegalArgumentException ex) {
