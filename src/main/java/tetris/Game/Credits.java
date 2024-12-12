@@ -120,7 +120,7 @@ public class Credits extends JPanel {
             GameplayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             creditsPanel.add(GameplayLabel);
 
-            JLabel gameplay = new JLabel("<html>Justin Morgan and Daniyar Alimkhanov</html>");
+            JLabel gameplay = new JLabel("<html>Justin Morgan and Lauren Gregory</html>");
             gameplay.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE - 10));
             gameplay.setForeground(Color.WHITE);
             gameplay.setHorizontalAlignment(SwingConstants.CENTER);
