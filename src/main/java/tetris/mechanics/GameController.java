@@ -170,26 +170,31 @@ public class GameController {
     }
 
     // Resets the game state to start a new game.
-    // Resets the game state to start a new game
     public void resetGame() {
-        gameBoard.clearBoard(); // Clear the game board
-        currentPiece = null; // Remove the current piece
-        nextPiece = null; // Clear the next piece
-        score = 0; // Reset the score
-        updateScoreDisplay(); // Update the UI with the reset score
+        // Clear the game board
+        gameBoard.clearBoard();
+        // Remove the current and next pieces
+        currentPiece = null; nextPiece = null;
+        // Reset the score
+        score = 0;
+        updateScoreDisplay();
+        // Ensure the timer is stopped before resetting
+        if (timer != null) { timer.stop();
 
-        if (timer != null) { // Ensure the timer exists
-            timer.stop(); // Stop the timer to prevent it from running in the background
         }
+        // Repaint the game board UI to clear visuals
+        gameBoardUI.repaint();
 
-        gameBoardUI.repaint(); // Refresh the game board UI to clear visuals
+        // Start the timer after resetting the game
+        initTimer();
+        // Spawn a new piece to ensure the first piece is placed correctly
+        spawnNewPiece();
     }
 
     // Getter for the game timer
     public Timer getTimer() {
         return timer; // Expose the timer instance
     }
-
 
     // Updates the score display in the UI.
     private void updateScoreDisplay() {
