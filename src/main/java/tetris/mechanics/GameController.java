@@ -291,6 +291,4 @@ public class GameController {
     public GameBoardUI getGameBoardUI() {
         return gameBoardUI;
     }
-
-
 }
